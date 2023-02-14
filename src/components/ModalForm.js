@@ -1,60 +1,77 @@
-import { Card, Form, Input, Radio, Select, Space,Button, Modal,} from "antd";
+import { Card, Form, Input, Radio, Select, Space, Button, Modal } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import { useState } from 'react';
-import NewTask from './NewTask';
-
+import { useState } from "react";
 
 const { TextArea } = Input;
+const { Option } = Select;
+const options = [{ key: "Little" }, { key: "Normal" }, { key: "Extreme" }];
+
 const ModalForm = (props) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [urgency, setUrgency] = useState("");
+
+  function nameChangeHandler(event) {
+    setName(event.target.value);
+  }
+  function descriptionChangeHandler(event) {
+    setDescription(event.target.value);
+  }
+  function urgencyChangeHandler(value) {
+    setUrgency(value);
+  }
+  function submitHandler(event) {
+    event.preventDefault();
+    const taskData = {
+      taskName: name,
+      taskDescription: description,
+      taskUrgency: urgency,
+    };
+    console.log(taskData);
+    props.onAddTask(taskData);
+    props.onCancel();
+  }
+
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-      <Space direction="vertical" size={16}>
-      <Card
+      <Modal
+        title="Basic Modal"
+        open={props.show}
+        onCancel={props.onCancel}
+        footer
       >
-        <Form layout="vertical">
-          <FormItem label="Task Name:">
-            <Input onChange={props.onNameChange}/>
-          </FormItem>
-          <FormItem label="Urgency:">
-            <Select
-              defaultValue="Normal"
-              onChange={props.onUrgencyChange}
-              options={[
-                {
-                  value: "little",
-                  label: "Little",
-                },
-                {
-                  value: "normal",
-                  label: "Normal",
-                },
-                {
-                  value: "extreme",
-                  label: "Extreme",
-                },
-              ]}
-            />
-          </FormItem>
-          <FormItem label="Description:">
-            <TextArea onChange={props.onDescriptionChange} rows={4} />
-          </FormItem>
-        </Form>
-      </Card>
-    </Space>
+        <Space direction="vertical" size={16}>
+          <Card>
+            <Form layout="vertical" onFinish={submitHandler}>
+              <FormItem name={"name"} label="Task Name:">
+                <Input onChange={nameChangeHandler} />
+              </FormItem>
+              <FormItem name={"urgency"} label="Urgency:">
+                <Select
+                  onChange={urgencyChangeHandler}
+                >
+                  {options.map((option) => {
+                    return (
+                      <Option key={option.key} value={option.key}>
+                        {option.key}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </FormItem>
+              <FormItem name={"description"} label="Description:">
+                <TextArea onChange={descriptionChangeHandler} rows={4} />
+              </FormItem>
+              <Button key="1" onClick={props.onCancel}>
+                Cancel
+              </Button>
+
+              <Button key="2" type="primary" onClick={submitHandler}>
+                Confirm
+              </Button>
+            </Form>
+          </Card>
+        </Space>
       </Modal>
     </>
   );

@@ -2,31 +2,28 @@ import { Space, Row, Col, Modal } from "antd";
 import { useState } from "react";
 import CardTask from "./CardTask";
 import ModalForm from "./ModalForm";
-import NewTask from "./NewTask";
 
-function TaskList() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [urgency, setUrgency] = useState("");
+function TaskList(props) {
+  const [tasks, setTasks] = useState([]);
 
-  function nameChangeHandler(event) {
-    setName(event.target.value);
+  function addTaskHandler(taskData) {
+    setTasks((existingTasks) => [taskData, ...existingTasks]);
   }
-  function descriptionChangeHandler(event) {
-    setDescription(event.target.value);
-  }
-  function urgencyChangeHandler(event) {
-    setUrgency(event.target.value);
-  }
-
   return (
-    <Space direction="vertical" size="middle">
+    <Space direction="horizontal" size="middle">
+      
       <ModalForm
-        onNameChange={nameChangeHandler}
-        onDescriptionChange={descriptionChangeHandler}
-        onUrgencyChange={urgencyChangeHandler}
+        show={props.showModalForm}
+        onCancel={props.closeModalForm}
+        onAddTask={addTaskHandler}
       />
-      <CardTask name={name} urgency={urgency} descriptions={description} />
+      {tasks.map((task) => (
+        <CardTask
+          name={task.taskName}
+          urgency={task.taskUrgency}
+          descriptions={task.taskDescription}
+        />
+      ))}
     </Space>
   );
 }
