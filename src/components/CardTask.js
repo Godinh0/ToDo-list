@@ -5,7 +5,7 @@ function CardTask({name, urgency, descriptions}) {
     let badgeColor=''
 
     if (urgency==='Normal') {
-      badgeColor='green'
+      badgeColor='yellow'
     } else if(urgency==='Little'){
       badgeColor='cyan'
     } else {
