@@ -35,7 +35,6 @@ const ModalForm = (props) => {
   return (
     <>
       <Modal
-        title="Basic Modal"
         open={props.show}
         onCancel={props.onCancel}
         footer
