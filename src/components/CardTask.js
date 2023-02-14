@@ -1,4 +1,4 @@
-import { Card, Badge } from "antd";
+import { Card, Badge, Button } from "antd";
 
 function CardTask({name, urgency, descriptions}) {
 
@@ -21,6 +21,7 @@ function CardTask({name, urgency, descriptions}) {
         }}
       >
         {descriptions}
+        
       </Card>
     </Badge.Ribbon>
 
