@@ -59,7 +59,7 @@ const ModalForm = (props) => {
                 </Select>
               </FormItem>
               <FormItem name={"description"} label="Description:">
-                <TextArea onChange={descriptionChangeHandler} rows={4} />
+                <TextArea  wrap="hard" onChange={descriptionChangeHandler} rows={4} cols={25}/>
               </FormItem>
               <Button key="1" onClick={props.onCancel}>
                 Cancel

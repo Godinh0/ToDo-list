@@ -1,10 +1,13 @@
 import { Space, Row, Col, Modal, Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CardTask from "./CardTask";
 import ModalForm from "./ModalForm";
 
+const tasksLocalStorage = JSON.parse(localStorage.getItem('myLocalStorage')||"[]")
+
 function TaskList(props) {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(tasksLocalStorage);
+
 
   function addTaskHandler(taskData) {
     setTasks((existingTasks) => [taskData, ...existingTasks]);
@@ -14,6 +17,12 @@ function TaskList(props) {
       return existingTasks.filter((item) => item !== task);
     });
   }
+
+  useEffect(() => {
+    localStorage.setItem('myLocalStorage', JSON.stringify(tasks));
+  }, [tasks])
+  
+  
   return (
     <Space direction="horizontal" size="middle">
       <ModalForm
@@ -25,13 +34,15 @@ function TaskList(props) {
         <>
           {tasks.map((task) => (
             <>
-              <CardTask
-                key={task.taskName}
-                name={task.taskName}
-                urgency={task.taskUrgency}
-                descriptions={task.taskDescription}
-              />
-              <Button onClick={() => deleteTaskHandler(task)}>Delete</Button>
+              <div style={{display:'flex', flexDirection:'column'}}>
+                <CardTask
+                  key={task.taskName}
+                  name={task.taskName}
+                  urgency={task.taskUrgency}
+                  descriptions={task.taskDescription}
+                />
+                <Button onClick={() => deleteTaskHandler(task)}>Done</Button>
+              </div>
             </>
           ))}
         </>
